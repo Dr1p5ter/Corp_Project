@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS publisher (
     pub_id INT NOT NULL AUTO_INCREMENT UNIQUE,
     pub_name VARCHAR(32) NOT NULL,
     pub_start_up_date DATE,
-    pub_game_count INT NOT NULL,
+    pub_game_count INT NOT NULL DEFAULT 0,
     PRIMARY KEY (pub_id)
 );
 
