@@ -6,7 +6,7 @@ USE user_info//
 
 DROP TRIGGER IF EXISTS insert_before_login_credentials//
 CREATE TRIGGER insert_before_login_credentials
-BEFORE INSERT ON login_credentials
+BEFORE INSERT ON user_info.login_credentials
 FOR EACH ROW
 BEGIN
 	SET NEW.need_password_change = DATE_ADD(NOW(), INTERVAL 6 MONTH);
@@ -15,7 +15,7 @@ END;//
 
 DROP TRIGGER IF EXISTS insert_after_login_credentials//
 CREATE TRIGGER insert_after_login_credentials
-AFTER INSERT ON login_credentials
+AFTER INSERT ON user_info.login_credentials
 FOR EACH ROW
 BEGIN
 	INSERT INTO profile_info (user_id) VALUES (NEW.user_id);
@@ -24,7 +24,7 @@ END;//
 
 DROP TRIGGER IF EXISTS update_login_credentials//
 CREATE TRIGGER update_login_credentials
-BEFORE UPDATE ON login_credentials
+BEFORE UPDATE ON user_info.login_credentials
 FOR EACH ROW
 BEGIN
 	IF NEW.login_password <> OLD.login_password THEN
@@ -35,7 +35,7 @@ END;//
 
 DROP TRIGGER IF EXISTS delete_login_credentials//
 CREATE TRIGGER delete_login_credentials
-BEFORE DELETE ON login_credentials
+BEFORE DELETE ON user_info.login_credentials
 FOR EACH ROW
 BEGIN
 	DELETE FROM profile_info
@@ -58,7 +58,7 @@ END;//
 
 DROP TRIGGER IF EXISTS insert_profile_info//
 CREATE TRIGGER insert_profile_info
-BEFORE INSERT ON profile_info
+BEFORE INSERT ON user_info.profile_info
 FOR EACH ROW
 BEGIN
 	SET NEW.date_registered = NOW();
@@ -66,7 +66,7 @@ END;//
 
 DROP TRIGGER IF EXISTS update_profile_info//
 CREATE TRIGGER update_profile_info
-BEFORE UPDATE ON profile_info
+BEFORE UPDATE ON user_info.profile_info
 FOR EACH ROW
 BEGIN
 	IF NEW.b_date IS NOT NULL THEN
@@ -78,7 +78,7 @@ END;//
 
 DROP TRIGGER IF EXISTS update_permissions//
 CREATE TRIGGER update_permissions
-BEFORE UPDATE ON permissions
+BEFORE UPDATE ON user_info.permissions
 FOR EACH ROW
 BEGIN
 	IF NEW.strike_count = 1 THEN
@@ -100,6 +100,18 @@ END;//
 -- GENERATE TRIGGERS FOR game_connections --
 
 USE game_connections//
+
+DROP TRIGGER IF EXISTS update_publisher_from_game_insert//
+CREATE TRIGGER update_publisher_from_game_insert
+BEFORE INSERT ON game_connections.game_info
+FOR EACH ROW
+BEGIN
+	DECLARE previous_game_count INT;
+    SET previous_game_count = (SELECT pub_game_count FROM game_connections.publisher WHERE pub_id = NEW.pub_id);
+	UPDATE game_connections.publisher
+    SET pub_game_count = previous_game_count + 1
+    WHERE pub_id = NEW.pub_id;
+END;//
 
 -- GENERATE TRIGGERS FOR transactions --
 
