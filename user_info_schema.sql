@@ -6,7 +6,7 @@ USE user_info;
 
 CREATE TABLE IF NOT EXISTS login_credentials (
     user_id INT NOT NULL AUTO_INCREMENT UNIQUE,
-    login_username VARCHAR(16) NOT NULL,
+    login_username VARCHAR(16) NOT NULL UNIQUE,
     login_password VARCHAR(32) NOT NULL,
     last_password_change DATETIME,
     need_password_change DATETIME,
