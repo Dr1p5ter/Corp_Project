@@ -4,3 +4,4 @@
 *.scss.map
 quick_reset.sql
 __pycache__
+debugger.py
