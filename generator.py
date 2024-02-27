@@ -2,11 +2,13 @@ import faker
 import string
 import random
 
+from user_info_helpers import UILC_LU_MAX_LEN, UILC_LP_MAX_LEN
+
 LET = string.ascii_letters # all ascii letters
 DIG = string.digits        # all ascii digits
 SPE = "!@#$%^&*_+-=~"      # all special ascii letters
 
-def gen_password(char_limit : int = 32) -> str :
+def gen_password(char_limit : int = UILC_LP_MAX_LEN) -> str :
     """ Generate random password of fixed length
 
     Builds password from available characters in header
@@ -26,7 +28,7 @@ def gen_random_int(char_limit : int = 3) -> int :
     """
     return "".join([random.choice(DIG) for i in range(char_limit)])
 
-def gen_username(firstname : str, lastname : str, char_limit : int = 32, minit : str = None, random_int_included : bool = 1) -> str :
+def gen_username(firstname : str, lastname : str, minit : str = None, char_limit : int = UILC_LU_MAX_LEN, random_int_included : bool = 1) -> str :
     """ Generate username of fixed length
 
     Construct a username given a set name
