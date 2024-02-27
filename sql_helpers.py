@@ -7,7 +7,7 @@ ADMIN_CRED_USER = "admin_console"                      # username for the admin 
 ADMIN_CRED_PASS = "8l>R$fTe`j!6V9QvWgG<5#.KTLl4:<'P"   # password for the admin terminal
 
 COL_HEADER = "blue"                                    # color constants for printing in
-COL_CONTEXT = "light_blue"                             # other helper modules
+COL_CONTEXT = "magenta"                             # other helper modules
 COL_SUCCESS = "green"                                  #
 COL_WARNING = "yellow"                                 #
 COL_ERROR = "red"                                      #
@@ -60,4 +60,4 @@ def get_and_close(con : MySQLConnection, cur : MySQLCursor) -> list :
     con.close()
 
     # return all the lines from the query
-    return fetch
+    return None if (fetch == []) else fetch
