@@ -2,8 +2,19 @@ import faker
 import string
 import random
 
+LET = string.ascii_letters # all ascii letters
+DIG = string.digits        # all ascii digits
+SPE = "!@#$%^&*_+-=~"      # all special ascii letters
+
 def gen_password(char_limit : int = 32) -> str :
-    return "".join([random.choice(string.ascii_letters + string.digits + "!@#$%^&*_+-=~") for i in range(char_limit)])
+    """ Generate random password of fixed length
+
+    Builds password from available characters in header
+
+    returns :
+        randomized string of characters
+    """
+    return "".join([random.choice(LET + DIG + SPE) for i in range(char_limit)])
 
 def gen_random_int(char_limit : int = 3) -> int :
     return "".join([random.choice(string.digits) for i in range(char_limit)])
