@@ -1,122 +1,41 @@
-import mysql.connector
 import generator as gen
-import random
-import string
 
-from mysql.connector import MySQLConnection
-from mysql.connector.cursor import MySQLCursor
-
-HOST = "localhost"
-ADMIN_CRED_USER = "admin_console"
-ADMIN_CRED_PASS = "8l>R$fTe`j!6V9QvWgG<5#.KTLl4:<'P"
-
-def generate_connction_cursor() -> list[MySQLConnection, MySQLCursor] :
-    # log into MySQL server
-    con = mysql.connector.connect(
-        host = HOST,
-        user = ADMIN_CRED_USER,
-        password = ADMIN_CRED_PASS
-    )
-
-    # create a buffered cursor
-    cur = con.cursor(buffered=True)
-
-    # return pointers to connector and cursor
-    return (con, cur)
-
-def get_and_close(con : MySQLConnection, cur : MySQLCursor) -> list :
-    # commit the query made using cursor
-    con.commit()
-
-    # fetch all lines from the commit
-    try :
-        fetch = cur.fetchall()
-    except :
-        fetch = None
-
-    # close the cursor and connection
-    cur.close()
-    con.close()
-
-    # return all the lines from the query
-    return fetch
-
-def find_user_info(username : str) -> list :
-    # generate cursor and grab connection pointer
-    con, cur = generate_connction_cursor()
-
-    # place query inside cursor
-    cur.execute(
-        """
-        SELECT user_id, login_username, login_password 
-        FROM user_info.login_credentials AS lc
-        WHERE lc.login_username = "{0}";
-        """.format(username)
-    )
-
-    # return and close
-    return get_and_close(con, cur)
-
-def insert_user_credentials(username : str, password : str) -> list :
-    # generate cursor and grab connection pointer
-    con, cur = generate_connction_cursor()
-
-    # place query inside cursor
-    try :
-        cur.execute(
-            """
-            INSERT INTO user_info.login_credentials (login_username, login_password)
-            VALUES ("{0}", "{1}");
-            """.format(username, password)
-        )
-    except mysql.connector.IntegrityError as err :
-        print(err)
-        get_and_close(con, cur)
-        return None
-    except Exception as err :
-        print(err)
-        get_and_close(con, cur)
-        return None
-    
-    # return and close
-    return get_and_close(con, cur)
-
-def update_user_credentials(old_username : str, new_username : str = None, new_password : str = None) -> list :
-    # figure out if the user_id exists
-    if find_user_info(old_username) == None :
-        return None
-    
-    # check if any argument is not None
-    if (new_username is None) and (new_password is None) :
-        return None
-
-    # generate cursor and grab connection pointer
-    con, cur = generate_connction_cursor()
-
-    # place query inside cursor
-    try :
-        cur.execute(
-            """
-            UPDATE user_info.login_credentials
-            {0}
-            {1}
-            WHERE login_username = {2}
-            """.format("login_username = " + new_username + ", " if (new_username != None) else "",
-                       "login_password = " + new_password + ", " if (new_password != None) else "",
-                       old_username)
-        )
-    except Exception as err :
-        print(err)
-        get_and_close(con, cur)
-        return None
-
-    # return and close
-    return get_and_close(con, cur)
+from sql_helpers import *
+from user_info_helpers import *
 
 if __name__ == "__main__" :
 
-    for i in range(50) :
-        f, m, l = gen.gen_name()
-        username = gen.gen_username(f, l, 16, minit = m, random_int_included = (int(random.choice(string.digits)) % 2))
-        password = gen.gen_password(32)
-        print(insert_user_credentials(username, password))
+    # TODO: fill in window here in future
+
+    ...
+
+    # user_dict = dict()
+    # n_entries_to_gen = 50
+    # start_at_one = True
+    # user_id_begin_inc_at = 1
+
+    # for i in range(1 if start_at_one else 0, n_entries_to_gen + 1 if start_at_one else n_entries_to_gen) :
+    #     f, m, l = gen.gen_name()
+    #     username = gen.gen_username(f, l, minit = m, random_int_included = (int(random.choice(string.digits)) % 2))
+    #     password = gen.gen_password()
+
+    #     user_dict[i] = {
+    #         "user_id" : user_id_begin_inc_at,
+    #         "fname" : f,
+    #         "minit" : m,
+    #         "lname" : l,
+    #         "login_username" : username,
+    #         "login_password" : password
+    #     }
+    #     user_id_begin_inc_at += 1
+
+    #     try :
+    #         print(insert_user_credentials(username, password))
+    #     except Exception :
+    #         user_dict.pop(i)
+
+    # print(update_user_credentials("new_me", new_username = "bad_user", new_password = "bad_pass"))
+    # print(update_user_credentials(user_dict[0]["login_username"], new_username = "new_user", new_password = "new_pass"))
+    # print(update_user_credentials(user_dict[1]["login_username"], new_password = "new_pass"))
+    # print(update_user_credentials(user_dict[2]["login_username"], new_username = "new_user"))
+    # print(update_user_credentials(user_dict[3]["login_username"]))
