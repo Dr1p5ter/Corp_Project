@@ -1,6 +1,7 @@
 import mysql.connector
 from mysql.connector import MySQLConnection
 from mysql.connector.cursor import MySQLCursor
+from logger import *
 
 HOST = "localhost"                                     # host name to the server
 ADMIN_CRED_USER = "admin_console"                      # username for the admin terminal
