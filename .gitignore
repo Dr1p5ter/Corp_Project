@@ -1,7 +1,4 @@
-.sass-cache/
-*.css.map
-*.sass.map
-*.scss.map
-quick_reset.sql
 __pycache__
+quick_reset.sql
+setup_quick_reset.py
 debugger.py
