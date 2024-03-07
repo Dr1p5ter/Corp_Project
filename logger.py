@@ -32,6 +32,4 @@ def get_logger(logger_name):
 
 	return logger
 
-curr_console_handler = get_console_handler()
-curr_file_handler = get_file_handler()
-curr_logger = get_logger(LOG_FILE)
+logger = get_logger(LOG_FILE)
