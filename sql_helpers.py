@@ -1,14 +1,17 @@
 import mysql.connector
+
+from logger import logger
 from mysql.connector import MySQLConnection
 from mysql.connector.cursor import MySQLCursor
-from logger import *
+from sys import exit
+from termcolor import colored
 
 HOST = "localhost"                                     # host name to the server
 ADMIN_CRED_USER = "admin_console"                      # username for the admin terminal
 ADMIN_CRED_PASS = "8l>R$fTe`j!6V9QvWgG<5#.KTLl4:<'P"   # password for the admin terminal
 
 COL_HEADER = "blue"                                    # color constants for printing in
-COL_CONTEXT = "magenta"                             # other helper modules
+COL_CONTEXT = "magenta"                                # other helper modules
 COL_SUCCESS = "green"                                  #
 COL_WARNING = "yellow"                                 #
 COL_ERROR = "red"                                      #
@@ -23,15 +26,19 @@ def generate_connction_cursor() -> list[MySQLConnection, MySQLCursor] :
         cur -> pointer to the connector opjects cursor object
     """
 
-    # log into MySQL server
-    con = mysql.connector.connect(
-        host = HOST,
-        user = ADMIN_CRED_USER,
-        password = ADMIN_CRED_PASS
-    )
+    try :
+        # log into MySQL server
+        con = mysql.connector.connect(
+            host = HOST,
+            user = ADMIN_CRED_USER,
+            password = ADMIN_CRED_PASS
+        )
 
-    # create a buffered cursor
-    cur = con.cursor(buffered=True)
+        # create a buffered cursor
+        cur = con.cursor(buffered=True)
+    except Exception as err :
+        logger.error(colored(err, COL_ERROR))
+        return None
 
     # return pointers to connector and cursor
     return (con, cur)
@@ -47,8 +54,11 @@ def get_and_close(con : MySQLConnection, cur : MySQLCursor) -> list :
         fetch -> an array of strings associated with each line of the cursors output
     """
 
-    # commit the query made using cursor
-    con.commit()
+    try :
+        # commit the query made using cursor
+        con.commit()
+    except Exception as err :
+        logger.error(colored(err, COL_ERROR))
 
     # fetch all lines from the commit
     try :
@@ -57,8 +67,13 @@ def get_and_close(con : MySQLConnection, cur : MySQLCursor) -> list :
         fetch = None
 
     # close the cursor and connection
-    cur.close()
-    con.close()
+    if not cur.close() :
+        logger.error(colored("Cursor was not able to be disconnected", COL_ERROR))
+        exit(-1)
+        
+    if not con.close() :
+        logger.error(colored("Connection was not able to be closed", COL_ERROR))
+        exit(-1)
 
     # return all the lines from the query
     return None if (fetch == []) else fetch
