@@ -1,6 +1,5 @@
 import generator as gen
 
-from sql_helpers import *
 from user_info_helpers import *
 
 if __name__ == "__main__" :
