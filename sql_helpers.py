@@ -19,7 +19,9 @@ COL_ERROR = "red"                                      #
 def generate_connction_cursor() -> list[MySQLConnection, MySQLCursor] :
     """ Start connection to MySQL server
 
-    This function will create both a connector and cursor.
+    This function will create both a connector and cursor. The function returns None if
+    for whatever reason the connection or cursor couldn't be made given admin credentials. Else
+    the function will return cursor and connection tuple.
 
     returns :
         con -> pointer to connector object
@@ -68,12 +70,12 @@ def get_and_close(con : MySQLConnection, cur : MySQLCursor) -> list :
 
     # close the cursor and connection
     if not cur.close() :
-        logger.error(colored("Cursor was not able to be disconnected", COL_ERROR))
-        exit(-1)
+        logger.error(colored("Cursor was not able to be disconnected or bad cursor", COL_ERROR))
+        return None
         
     if not con.close() :
-        logger.error(colored("Connection was not able to be closed", COL_ERROR))
-        exit(-1)
+        logger.error(colored("Connection was not able to be closed or bad connection", COL_ERROR))
+        return None
 
     # return all the lines from the query
     return None if (fetch == []) else fetch
