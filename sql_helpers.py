@@ -13,8 +13,8 @@ ADMIN_CRED_PASS = "8l>R$fTe`j!6V9QvWgG<5#.KTLl4:<'P"   # password for the admin 
 COL_HEADER = "blue"                                    # color constants for printing in
 COL_CONTEXT = "magenta"                                # other helper modules
 COL_SUCCESS = "green"                                  #
-COL_WARNING = "yellow"                                 #
-COL_ERROR = "red"                                      #
+COL_WARNING = "red"                                    #
+COL_ERROR = "yellow"                                   #
 
 def generate_connction_cursor() -> list[MySQLConnection, MySQLCursor] :
     """ Start connection to MySQL server
@@ -69,11 +69,11 @@ def get_and_close(con : MySQLConnection, cur : MySQLCursor) -> list :
         fetch = None
 
     # close the cursor and connection
-    if not cur.close() :
+    if cur.close() == False :
         logger.error(colored("Cursor was not able to be disconnected or bad cursor", COL_ERROR))
         return None
         
-    if not con.close() :
+    if con.close() == False :
         logger.error(colored("Connection was not able to be closed or bad connection", COL_ERROR))
         return None
 
@@ -99,5 +99,5 @@ def process_query(query : str, con : MySQLConnection, cur : MySQLCursor) -> list
         return None
 
     # return and close
-    logger.info(colored("select was successful", COL_SUCCESS))
+    logger.info(colored("Select was successful", COL_SUCCESS))
     return get_and_close(con, cur)
