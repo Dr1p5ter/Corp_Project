@@ -48,9 +48,6 @@ BEGIN
     WHERE follows_user.user1_id = OLD.user_id
     OR follows_user.user2_id = OLD.user_id;
     
-    DELETE FROM transactions.transaction_count_per_user
-    WHERE transactions.transaction_count_per_user.user_id = OLD.user_id;
-    
     UPDATE transactions.store_transactions
     SET transactions.store_transactions.user_id = NULL
     WHERE transactions.store_transactions.user_id = OLD.user_id;
