@@ -44,16 +44,11 @@ def find_user_info(username : str) -> list :
     # generate cursor and grab connection pointer
     con, cur = generate_connction_cursor()
 
-    # place query inside cursor
+    # place query inside cursor return the output
     Q = """
-        SELECT user_id, login_username, login_password\nFROM user_info.login_credentials\nWHERE login_username = "{0}";
+        SELECT user_id, login_username, login_password\nFROM user_info.login_credentials\nWHERE login_username = \"{0}\";
         """.format(username).strip()
-    logger.info(colored("Query to process :", COL_HEADER) + '\n' + colored(Q, COL_CONTEXT))
-    cur.execute(Q)
-
-    # return and close
-    logger.info(colored("select was successful", COL_SUCCESS))
-    return get_and_close(con, cur)
+    return process_query(Q, con, cur)
 
 def insert_user_credentials(username : str, password : str) -> list :
     """ Insert a users credentials into the database
@@ -71,22 +66,11 @@ def insert_user_credentials(username : str, password : str) -> list :
     # generate cursor and grab connection pointer
     con, cur = generate_connction_cursor()
 
-    # place query inside cursor
+    # place query inside cursor return the output
     Q = """
         INSERT INTO user_info.login_credentials (login_username, login_password) VALUES (\"{0}\", \"{1}\");
         """.format(username, password).strip()
-    try :
-        # pass the query into the cursor
-        logger.info(colored("Query to process :", COL_HEADER) + '\n' + colored(Q, COL_CONTEXT))
-        cur.execute(Q)
-    except Exception as err :
-        logger.error(colored(err, COL_ERROR))
-        get_and_close(con, cur)
-        return None
-    
-    # return and close
-    logger.info(colored("select was successful", COL_SUCCESS))
-    return get_and_close(con, cur)
+    return process_query(Q, con, cur)
 
 def update_user_credentials(old_username : str, new_username : str = None, new_password : str = None) -> list :
     """ Attempt to update user credentials
@@ -101,34 +85,47 @@ def update_user_credentials(old_username : str, new_username : str = None, new_p
 
     # figure out if the user_id exists
     if find_user_info(old_username) == None :
-        logger.warning(colored("old username \'{0}\' was not found in database : {nothing updated}".format(old_username), COL_WARNING))
+        logger.warning(colored("old username \'{0}\' was not found in database : nothing updated".format(old_username), COL_WARNING))
         return None
 
     # check if any argument is not None
     if (new_username is None) and (new_password is None) :
-        logger.warning(colored("no new username or passsword was provided : {nothing updated}", COL_WARNING))
+        logger.warning(colored("no new username or passsword was provided : nothing updated", COL_WARNING))
         return None
 
     # generate cursor and grab connection pointer
     con, cur = generate_connction_cursor()
 
-    # make query variable
+    # place query inside cursor return the output
     Q = """
         UPDATE user_info.login_credentials\nSET {0}{1} {2}\nWHERE login_username = \"{3}\"
         """.format("login_username = \"" + new_username + "\"" if (new_username != None) else "",
                    "," if ((new_username != None) and (new_password != None)) else "",
                    "login_password = \"" + new_password + "\"" if (new_password != None) else "",
                    old_username).strip()
-    try :
-        # pass the query into the cursor
-        logger.info(colored("Query to process :", COL_HEADER) + '\n' + colored(Q, COL_CONTEXT))
-        cur.execute(Q)
-    except Exception as err :
-        # log error if execution fails for any reason
-        logger.error(colored(err, COL_ERROR))
-        get_and_close(con, cur)
-        return None
+    return process_query(Q, con, cur)
 
-    # return and close
-    logger.info(colored("select was successful", COL_SUCCESS))
-    return get_and_close(con, cur)
+def delete_user_credentials(user_id : int, username : str, password : str) -> list :
+    """ Deletes user from user_credentials
+
+    Brute force approach for removal of user_id from the records inside of user_credentials. This
+    requires no checking with the hardship of confirming record.
+
+    returns :
+        list containing values related to the query commit on the cursor
+    """
+    
+    # validate inputs before proceeding
+    if find_user_info(username) == None :
+        logger.warning(colored("username \'{0}\' was not found in database : nothing deleted".format(username), COL_WARNING))
+        return None
+    
+    # proceed with deletion of record
+    # generate cursor and grab connection pointer
+    con, cur = generate_connction_cursor()
+
+    # make query variable
+    Q = """
+        DELETE FROM user_info.login_credentials\nWHERE user_id = {0}\nAND login_username = \"{1}\"\nAND login_password = \"{2}\";
+        """.format(user_id, username, password).strip()
+    return process_query(Q, con, cur)
