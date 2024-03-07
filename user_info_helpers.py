@@ -1,5 +1,4 @@
 from sql_helpers import *
-from termcolor import *
 
 UILC_LU_MAX_LEN = 16 # user_info.login_credentials.login_username max length
 UILC_LP_MAX_LEN = 32 # user_info.login_credentials.login_password max length
@@ -13,10 +12,10 @@ def is_username_valid(username : str) -> bool :
         True if valid, False otherwise
     """
     if find_user_info(username) != None :
-        print(colored("username already exists within database", COL_ERROR))
+        logger.error(colored("username already exists within database", COL_ERROR))
         return False
     if len(username) > UILC_LU_MAX_LEN :
-        print(colored("username length must not exceed {0} characters".format(UILC_LU_MAX_LEN), COL_ERROR))
+        logger.error(colored("username length must not exceed {0} characters".format(UILC_LU_MAX_LEN), COL_ERROR))
         return False
     return True
 
@@ -29,6 +28,7 @@ def is_password_valid(password : str) -> bool :
         True if valid, Flase otherwise
     """
     if len(password) > UILC_LP_MAX_LEN :
+        logger.error(colored("password length must not exceed {0} characters".format(UILC_LP_MAX_LEN), COL_ERROR))
         return False
     return True
 
@@ -48,12 +48,11 @@ def find_user_info(username : str) -> list :
     Q = """
         SELECT user_id, login_username, login_password\nFROM user_info.login_credentials\nWHERE login_username = "{0}";
         """.format(username).strip()
-    print(colored("Query to process :", COL_HEADER))
-    print(colored(Q, COL_CONTEXT))
+    logger.info(colored("Query to process :", COL_HEADER) + '\n' + colored(Q, COL_CONTEXT))
     cur.execute(Q)
 
     # return and close
-    print(colored("select was successful", COL_SUCCESS))
+    logger.info(colored("select was successful", COL_SUCCESS))
     return get_and_close(con, cur)
 
 def insert_user_credentials(username : str, password : str) -> list :
@@ -66,7 +65,7 @@ def insert_user_credentials(username : str, password : str) -> list :
     """
     # validate inputs before proceeding
     if (not is_username_valid(username)) or (not is_password_valid(password)) :
-        print(colored("username or password not valid/violates schema : {nothing inserted}", COL_WARNING))
+        logger.warning(colored("username or password not valid/violates schema : {nothing inserted}", COL_WARNING))
         return None
 
     # generate cursor and grab connection pointer
@@ -78,20 +77,15 @@ def insert_user_credentials(username : str, password : str) -> list :
         """.format(username, password).strip()
     try :
         # pass the query into the cursor
-        print(colored("Query to process :", COL_HEADER))
-        print(colored(Q, COL_CONTEXT))
+        logger.info(colored("Query to process :", COL_HEADER) + '\n' + colored(Q, COL_CONTEXT))
         cur.execute(Q)
-    except mysql.connector.IntegrityError as err :
-        print(colored(err, COL_ERROR))
-        get_and_close(con, cur)
-        return None
     except Exception as err :
-        print(colored(err, COL_ERROR))
+        logger.error(colored(err, COL_ERROR))
         get_and_close(con, cur)
         return None
     
     # return and close
-    print(colored("insert was successful", COL_SUCCESS))
+    logger.info(colored("select was successful", COL_SUCCESS))
     return get_and_close(con, cur)
 
 def update_user_credentials(old_username : str, new_username : str = None, new_password : str = None) -> list :
@@ -107,12 +101,12 @@ def update_user_credentials(old_username : str, new_username : str = None, new_p
 
     # figure out if the user_id exists
     if find_user_info(old_username) == None :
-        print(colored("old username \'{0}\' was not found in database : {nothing updated}".format(old_username), COL_WARNING))
+        logger.warning(colored("old username \'{0}\' was not found in database : {nothing updated}".format(old_username), COL_WARNING))
         return None
 
     # check if any argument is not None
     if (new_username is None) and (new_password is None) :
-        print(colored("no new username or passsword was provided : {nothing updated}", COL_WARNING))
+        logger.warning(colored("no new username or passsword was provided : {nothing updated}", COL_WARNING))
         return None
 
     # generate cursor and grab connection pointer
@@ -127,15 +121,14 @@ def update_user_credentials(old_username : str, new_username : str = None, new_p
                    old_username).strip()
     try :
         # pass the query into the cursor
-        print(colored("Query to process :", COL_HEADER))
-        print(colored(Q, COL_CONTEXT))
+        logger.info(colored("Query to process :", COL_HEADER) + '\n' + colored(Q, COL_CONTEXT))
         cur.execute(Q)
     except Exception as err :
-        # print error if execution fails for any reason
-        print(colored(err, COL_ERROR))
+        # log error if execution fails for any reason
+        logger.error(colored(err, COL_ERROR))
         get_and_close(con, cur)
         return None
 
     # return and close
-    print(colored("update was successful", COL_SUCCESS))
+    logger.info(colored("select was successful", COL_SUCCESS))
     return get_and_close(con, cur)
