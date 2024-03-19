@@ -23,7 +23,7 @@ def SIGINT_handler(sig, frame) :
     loop_end = False
 sig.signal(sig.SIGINT, SIGINT_handler)
 
-# TODO: load in previous records for populaton
+# load in previous records for populaton
 try :
     with open(known_records_path, "r", buffering=True, ) as file:
         records = file.readlines()
