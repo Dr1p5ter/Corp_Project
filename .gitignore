@@ -3,3 +3,4 @@ quick_reset.sql
 setup_quick_reset.py
 *.log*
 *.tsv
+test.py
