@@ -1,5 +1,5 @@
 __pycache__
 quick_reset.sql
 setup_quick_reset.py
-*.log
+*.log*
 *.tsv
