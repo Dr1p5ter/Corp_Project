@@ -14,7 +14,7 @@ dpx = 5     # percentage of deletions
 upx = 15    # percentage of updates
 ipx = 80    # percentage of insertions
 
-tfx = 1    # coeficient that dictates rate of population time gaps differ from [0, tfx)
+tfx = 4    # coeficient that dictates rate of population time gaps differ from [0, tfx)
 
 # set up handler to safely end the program
 loop_end = True
