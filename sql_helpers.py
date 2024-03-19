@@ -80,7 +80,7 @@ def get_and_close(con : MySQLConnection, cur : MySQLCursor) -> list :
     # return all the lines from the query
     return None if (fetch == []) else fetch
 
-def process_query(query : str, con : MySQLConnection, cur : MySQLCursor) -> list :
+def process_query(query : str) -> list :
     """ Abstraction to process queries for other helper modules
 
     Executes the query and closes the connection while returning the output.
@@ -88,6 +88,9 @@ def process_query(query : str, con : MySQLConnection, cur : MySQLCursor) -> list
     returns :
         list containing values related to the query commit on the cursor
     """
+    # generate cursor and grab connection pointer
+    con, cur = generate_connction_cursor()
+
     try :
         # pass the query into the cursor
         logger.info(colored("Query to process :", COL_HEADER) + '\n' + colored(query, COL_CONTEXT))
