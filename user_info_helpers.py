@@ -48,7 +48,8 @@ def find_user_info(username : str) -> list :
     Q = """
         SELECT *\nFROM user_info.login_credentials\nWHERE login_username = \"{0}\";
         """.format(username).strip()
-    return process_query(Q, con, cur)
+    res = process_query(Q, con, cur)
+    return None if res == None else res[0]
 
 def insert_user_credentials(username : str, password : str) -> list :
     """ Insert a users credentials into the database
