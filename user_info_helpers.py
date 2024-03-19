@@ -38,7 +38,7 @@ def find_user_info(username : str) -> list :
     Attempts to grab the user's information with regard to it's username
 
     returns :
-        tuple of users id, username, and password
+        tuple consisting of (user_id, login_username, login_password, last_password_change, need_password_change)
         None if not found
     """
     # generate cursor and grab connection pointer
@@ -46,7 +46,7 @@ def find_user_info(username : str) -> list :
 
     # place query inside cursor return the output
     Q = """
-        SELECT user_id, login_username, login_password\nFROM user_info.login_credentials\nWHERE login_username = \"{0}\";
+        SELECT *\nFROM user_info.login_credentials\nWHERE login_username = \"{0}\";
         """.format(username).strip()
     return process_query(Q, con, cur)
 
