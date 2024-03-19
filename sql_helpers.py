@@ -3,7 +3,6 @@ import mysql.connector
 from logger import logger
 from mysql.connector import MySQLConnection
 from mysql.connector.cursor import MySQLCursor
-from sys import exit
 from termcolor import colored
 
 HOST = "localhost"                                     # host name to the server
