@@ -65,10 +65,17 @@ def gen_datetime() -> datetime :
     returns :
         datetime
     """
-    yyyy = random.randrange(year_limit[0], year_limit[1] + 1)
-    mm = random.randrange(month_limit[0], month_limit[1] + 1)
-    dd = random.randrange(day_limit[0], day_limit[1] + 1)
-    HH = random.randrange(hour_limit[0], hour_limit[1] + 1)
-    MM = random.randrange(minute_limit[0], minute_limit[1] + 1)
-    SS = random.randrange(second_limit[0], second_limit[1] + 1)
-    return datetime(yyyy, mm, dd, HH, MM, SS)
+    status = True
+    while status :
+        yyyy = random.randrange(year_limit[0], year_limit[1] + 1)
+        mm = random.randrange(month_limit[0], month_limit[1] + 1)
+        dd = random.randrange(day_limit[0], day_limit[1] + 1)
+        HH = random.randrange(hour_limit[0], hour_limit[1] + 1)
+        MM = random.randrange(minute_limit[0], minute_limit[1] + 1)
+        SS = random.randrange(second_limit[0], second_limit[1] + 1)
+        try :
+            ret = datetime(yyyy, mm, dd, HH, MM, SS)
+            status = False
+        except :
+            status = True
+    return ret
