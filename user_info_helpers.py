@@ -169,7 +169,7 @@ def update_user_permissions(user_id : str, new_strike_count : int) -> list :
 
     # place query inside cursor return the output
     Q = """
-        UPDATE user_info.permissions\nSET strike_count = {0}\nWHERE user_id = {3};
+        UPDATE user_info.permissions\nSET strike_count = {0}\nWHERE user_id = {1};
         """.format(str(new_strike_count), user_id).strip()
     return process_query(Q)
 
