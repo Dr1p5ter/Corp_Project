@@ -10,7 +10,7 @@ BEFORE INSERT ON user_info.login_credentials
 FOR EACH ROW
 BEGIN
 	SET NEW.need_password_change = DATE_ADD(NOW(), INTERVAL 6 MONTH);
-    SET NEW.last_password_change = NULL;
+    SET NEW.last_password_change = NOW();
 END;//
 
 DROP TRIGGER IF EXISTS insert_after_login_credentials//
