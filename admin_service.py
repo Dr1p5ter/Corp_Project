@@ -34,8 +34,6 @@ if __name__ == "__main__" :
     for key in user_dict.keys() :
         print(f'{key} -> {user_dict[key]}')
 
-    print(update_user_credentials("new_me", new_username = "bad_user", new_password = "bad_pass"))                              # warning no username found
-    print(update_user_credentials(user_dict["user_1"]["login_username"], new_username = "new_user", new_password = "new_pass")) # update user_1 with new pass and name
-    print(update_user_credentials(user_dict["user_2"]["login_username"], new_password = "new_pass"))                            # only change password
-    print(update_user_credentials(user_dict["user_3"]["login_username"], new_username = "new_user"))                            # only change username
-    print(update_user_credentials(user_dict["user_4"]["login_username"]))                                                       # warning no new cred given to function
+    for key in user_dict.keys() :
+        res = delete_user_credentials(user_dict[key]["user_id"], user_dict[key]["login_username"], user_dict[key]["login_password"])
+        print(res) if res != None else ...
