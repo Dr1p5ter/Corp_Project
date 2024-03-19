@@ -19,7 +19,7 @@ AFTER INSERT ON user_info.login_credentials
 FOR EACH ROW
 BEGIN
 	INSERT INTO profile_info (user_id) VALUES (NEW.user_id);
-    INSERT INTO permissions (user_id, strike_count, text_coms_public, text_coms_friend, voice_coms_public, voice_coms_friend) VALUES (NEW.user_id, 0, TRUE, TRUE, TRUE, TRUE);
+    INSERT INTO permissions (user_id, strike_count, text_coms_public, text_coms_friend, voice_coms_public, voice_coms_friend, last_strike_made, date_to_clean_strikes) VALUES (NEW.user_id, 0, TRUE, TRUE, TRUE, TRUE, NOW(), NOW());
 END;//
 
 DROP TRIGGER IF EXISTS update_login_credentials//
