@@ -184,7 +184,7 @@ def update_user_profile_info(user_id : str, new_fname : str = None, new_minit : 
     """
     # place query inside cursor return the output
     Q = """
-        UPDATE user_info.profile_info\nSET fname = {0}, minit = {1}, lname = {2}, b_date = {3}\nWHERE user_id = {4};
+        UPDATE user_info.profile_info\nSET fname = \"{0}\", minit = \"{1}\", lname = \"{2}\", b_date = \"{3}\"\nWHERE user_id = {4};
         """.format("NULL" if new_fname == None else new_fname,
                    "NULL" if new_minit == None else new_minit,
                    "NULL" if new_lname == None else new_lname,
