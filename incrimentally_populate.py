@@ -11,12 +11,12 @@ known_records_path = "records.tsv"  # path to file holding all stored populated 
 known_records = {}                  # dictionary that holds in all of the records
 
 dpx = 5     # percentage of deletions
-upx = 35    # percentage of updates
-ipx = 60    # percentage of insertions
+upx = 45    # percentage of updates
+ipx = 50    # percentage of insertions
 
 uspx = 20   # percentage of updating strike count
-uppx = 60   # percentage of updating profile info
-uipx = 20   # percentage of updating login info
+uppx = 70   # percentage of updating profile info
+uipx = 10   # percentage of updating login info
 
 tfx = 4    # coeficient that dictates rate of population time gaps differ from [0, tfx)
 
