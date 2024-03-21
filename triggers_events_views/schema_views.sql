@@ -1,3 +1,5 @@
+-- GENERATE VIEWS FOR user_info --
+
 CREATE OR REPLACE VIEW strike_time_remaining AS
 SELECT user_id, strike_count, last_strike_made, date_to_clean_strikes, 
 TIMESTAMPDIFF(DAY, NOW(), date_to_clean_strikes) AS days_remaining,
