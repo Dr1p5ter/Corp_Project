@@ -82,12 +82,12 @@ BEGIN
 		SET NEW.text_coms_public = FALSE;
         SET NEW.voice_coms_public = FALSE;
         SET NEW.last_strike_made = NOW();
-        SET NEW.date_to_clean_strikes = DATE_ADD(NOW(), INTERVAL 5 MINUTES);
+        SET NEW.date_to_clean_strikes = DATE_ADD(NOW(), INTERVAL 5 MINUTE);
 	ELSEIF NEW.strike_count = 2 THEN
 		SET NEW.text_coms_friend = FALSE;
         SET NEW.voice_coms_friend = FALSE;
         SET NEW.last_strike_made = NOW();
-        SET NEW.date_to_clean_strikes = DATE_ADD(NOW(), INTERVAL 30 MINUTES);
+        SET NEW.date_to_clean_strikes = DATE_ADD(NOW(), INTERVAL 30 MINUTE);
 	ELSEIF NEW.strike_count > 2 THEN
 		SET NEW.last_strike_made = NOW();
         SET NEW.date_to_clean_strikes = DATE_ADD(NOW(), INTERVAL 1 HOUR);
