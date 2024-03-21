@@ -12,5 +12,4 @@ DO
 		WHERE date_to_clean_strikes < NOW();
 	END//
 
-
 DELIMITER ;
