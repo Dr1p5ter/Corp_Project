@@ -2,3 +2,5 @@ __pycache__
 *.log*
 *.tsv
 test.py
+setup_quick_reset.py
+quick_reset.sql
