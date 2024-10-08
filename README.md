@@ -4,6 +4,7 @@
 
 * [Description](https://github.com/Dr1p5ter/Corp_Project#Description)
 * [Database Population](https://github.com/Dr1p5ter/Corp_Project#Database_Population)
+* [Current Plans For Now](https://github.com/Dr1p5ter/Corp_Project#Current_Plans_For_Now)
 
 ## Description
 
@@ -12,3 +13,7 @@
 ## Database Population
 
 > Since I don't have GUI applications set up at this time, most of the data is pseudo-generated. These files can be found in the repository under generator.py as well as its usage. All pseudo-generated data is fake and non-exploitable.
+
+## Current Plans For Now
+
+> I have been involved in other projects at this moment that corispond with web crawling. I will persue this at a later date.
